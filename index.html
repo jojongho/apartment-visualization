@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>천안 두정역 반도유보라 아파트 정보</title>
+  
+  <!-- Tailwind CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  
+  <!-- React 및 기타 라이브러리 -->
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="apartment-info-container"></div>
+
+  <script type="text/babel">
+import React, { useState } from 'react';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+const UboraApartmentInfo = () => {
+  const [activeTab, setActiveTab] = useState(0);
+
+  // 세대 타입 데이터
+  const unitTypeData = [
+    { name: '84㎡A', value: 231, color: '#8884d8' },
+    { name: '84㎡B', value: 140, color: '#82ca9d' },
+    { name: '84㎡C', value: 185, color: '#ffc658' }
+  ];
+
+  // 주변 아파트 시세 비교 데이터 (84㎡ 기준)
+  const priceComparisonData = [
+    { name: '유보라 천안 두정역', price: 4.05, color: '#FF6B6B' }, // 분양가 평균
+    { name: '포레나 천안 두정', price: 5.15, color: '#4ECDC4' }, // 호가 중간값
+    { name: '힐스테이트 두정역', price: 5.4, color: '#1A535C' }, // 실거래 중간값
+    { name: '두정역 효성해링턴', price: 3.85, color: '#FFE66D' } // 실거래 중간값
+  ];
+
+  // 개발 예정 타임라인 데이터
+  const developmentTimelineData = [
+    { name: '유보라 천안 두정역 입주', year: '2025년 6월', color: '#FF6B6B' },
+    { name: '힐스테이트 두정역 입주', year: '2025년 3월', color: '#4ECDC4' },
+    { name: '롯데캐슬 더 두정 입주', year: '2025년', color: '#1A535C' },
+    { name: '천안 두정역 양우내안애 입주', year: '2027년 12월', color: '#FFE66D' },
+    { name: '미래모빌리티 국가산업단지', year: '2028년', color: '#45ADA8' }
+  ];
+
+  // 탭 정보 배열
+  const tabs = [
+    { id: 0, name: '기본 정보' },
+    { id: 1, name: '세대 구성' },
+    { id: 2, name: '입지 및 환경' },
+    { id: 3, name: '시세 및 전망' },
+    { id: 4, name: '개발 계획' }
+  ];
+
+  return (
+    <div className="apartment-info-container p-4 bg-white rounded-lg shadow-lg">
+      {/* 헤더 섹션 */}
+      <div className="header-section bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-lg mb-6">
+        <h1 className="text-3xl font-bold mb-2">유보라 천안 두정역</h1>
+        <p className="text-lg">반도건설의 천안 첫 '유보라' 브랜드 아파트</p>
+      </div>
+
+      {/* 커스텀 탭 네비게이션 */}
+      <div className="tab-navigation mb-6">
+        <ul className="flex border-b">
+          {tabs.map((tab) => (
+            <li 
+              key={tab.id} 
+              className={`mr-2 ${activeTab === tab.id ? 'border-b-2 border-blue-500' : ''}`}
+            >
+              <button 
+                className={`py-2 px-4 font-medium ${activeTab === tab.id ? 'text-blue-600' : 'text-gray-500'}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {tab.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* 탭 콘텐츠 */}
+      <div className="tab-content">
+        {/* 기본 정보 탭 */}
+        {activeTab === 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">단지 개요</h2>
+              <ul className="space-y-2">
+                <li className="flex justify-between"><span className="font-medium">단지명:</span> <span>유보라 천안 두정역</span></li>
+                <li className="flex justify-between"><span className="font-medium">위치:</span> <span>충청남도 천안시 서북구 두정동 393-21번지 일원</span></li>
+                <li className="flex justify-between"><span className="font-medium">총 세대수:</span> <span>556세대</span></li>
+                <li className="flex justify-between"><span className="font-medium">동 수 및 층수:</span> <span>8개동, 지하 2층 ~ 지상 29층</span></li>
+                <li className="flex justify-between"><span className="font-medium">준공 예정:</span> <span>2025년 6월</span></li>
+                <li className="flex justify-between"><span className="font-medium">건설사/시행사:</span> <span>(주)반도건설</span></li>
+              </ul>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">부지 및 건축 정보</h2>
+              <ul className="space-y-2">
+                <li className="flex justify-between"><span className="font-medium">용도지역:</span> <span>제2종 일반주거지역</span></li>
+                <li className="flex justify-between"><span className="font-medium">대지면적:</span> <span>28,264㎡</span></li>
+                <li className="flex justify-between"><span className="font-medium">연면적:</span> <span>89,959.9㎡</span></li>
+                <li className="flex justify-between"><span className="font-medium">건폐율:</span> <span>16.8%</span></li>
+                <li className="flex justify-between"><span className="font-medium">용적률:</span> <span>217%</span></li>
+                <li className="flex justify-between"><span className="font-medium">주차 대수:</span> <span>684대 (세대당 약 1.23대)</span></li>
+              </ul>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg md:col-span-2">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">단지 특화 사항</h2>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">✓</span>
+                  <span>100% 지하주차장 설계로 지상에 차가 없는 공원 같은 단지 구현</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">✓</span>
+                  <span>단지 내 학습관, 피트니스센터, 실내 골프연습장, 작은도서관, 게스트하우스, 맘스스테이션 등 다양한 커뮤니티 시설 계획</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">✓</span>
+                  <span>계절감을 느낄 수 있는 조경 시설과 단지 곳곳의 놀이 및 휴게 시설</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">✓</span>
+                  <span>음성인식 등 첨단 IoT(사물인터넷) 시스템 적용</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">✓</span>
+                  <span>거실 기준 천장고 2.4m로 개방감 향상</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {/* 세대 구성 탭 */}
+        {activeTab === 1 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">세대 타입 구성</h2>
+              <p className="mb-4">전 세대가 전용면적 84㎡(구 34평형, 국민평형) 단일 면적으로 구성됩니다.</p>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={unitTypeData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={true}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {unitTypeData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => [`${value}세대`, '세대수']} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="mt-4">
+                <ul className="space-y-2">
+                  <li className="flex justify-between"><span className="font-medium">84㎡A:</span> <span>231세대</span></li>
+                  <li className="flex justify-between"><span className="font-medium">84㎡B:</span> <span>140세대</span></li>
+                  <li className="flex justify-between"><span className="font-medium">84㎡C:</span> <span>185세대</span></li>
+                  <li className="flex justify-between"><span className="font-medium">총 세대수:</span> <span>556세대</span></li>
+                </ul>
+              </div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">세대 주요 특징</h2>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">►</span>
+                  <div>
+                    <span className="font-medium">향 및 구조:</span> 
+                    <p>전 세대가 남향 위주로 배치되었으며, 채광과 통풍에 유리한 4베이 판상형 구조</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">►</span>
+                  <div>
+                    <span className="font-medium">알파룸:</span> 
+                    <p>모든 타입에 알파룸 제공, 84㎡A/B 타입은 유상 옵션으로 알파룸을 대형 팬트리, 홈오피스 또는 홈바로 변경 가능</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">►</span>
+                  <div>
+                    <span className="font-medium">드레스룸:</span> 
+                    <p>파우더룸형과 수납 공간을 넓힌 확장형(복도식) 중 선택 가능</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">►</span>
+                  <div>
+                    <span className="font-medium">천장고:</span> 
+                    <p>거실 기준 천장고 2.4m로 개방감 향상</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">►</span>
+                  <div>
+                    <span className="font-medium">스마트 홈:</span> 
+                    <p>음성인식 등 첨단 IoT(사물인터넷) 시스템 적용으로 생활 편의성 향상</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {/* 입지 및 환경 탭 */}
+        {activeTab === 2 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">교통 환경</h2>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  <div>
+                    <span className="font-medium">지하철:</span> 
+                    <p>수도권 전철 1호선 두정역 도보 5분 내외 거리 (2023년 5월 개통된 두정역 북부출입구(2번 출구) 이용)</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  <div>
+                    <span className="font-medium">도로:</span> 
+                    <p>1번 국도, 삼성대로, 천안대로 등 주요 간선도로와 인접</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  <div>
+                    <span className="font-medium">고속도로:</span> 
+                    <p>경부고속도로 천안IC 인근으로 수도권 및 전국 각지 이동 용이</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  <div>
+                    <span className="font-medium">KTX/SRT:</span> 
+                    <p>차량으로 약 15분 거리에 천안아산역 위치 (서울 수서역까지 약 28분, 서울역까지 약 35분)</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">교육 환경</h2>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <span className="text-orange-500 mr-2">✦</span>
+                  <div>
+                    <span className="font-medium">유치원/초등학교:</span> 
+                    <p>천안도솔공립유치원과 두정초등학교가 도보 통학 가능한 거리에 위치 (육교 설치 계획)</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-orange-500 mr-2">✦</span>
+                  <div>
+                    <span className="font-medium">중학교:</span> 
+                    <p>두정중학교가 인근에 위치</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-orange-500 mr-2">✦</span>
+                  <div>
+                    <span className="font-medium">고등학교:</span> 
+                    <p>천안시 유일의 자립형 사립고인 북일고등학교와 북일여자고등학교 등 명문 학군 인접</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-orange-500 mr-2">✦</span>
+                  <div>
+                    <span className="font-medium">대학교:</span> 
+                    <p>단국대학교 천안캠퍼스와 공주대학교 천안캠퍼스 인근</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg md:col-span-2">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">생활 편의시설</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h3 className="text-lg font-medium mb-2 text-gray-700">쇼핑</h3>
+                  <p>롯데마트, 이마트, 신세계백화점, 코스트코 등 대형 쇼핑 시설과 와마트 등 중형 마트가 차량으로 약 5km 내외 거리에 위치</p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium mb-2 text-gray-700">의료</h3>
+                  <p>지역 거점 병원인 단국대학교 병원이 인접해 있어 양질의 의료 서비스 이용 용이</p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium mb-2 text-gray-700">문화/여가</h3>
+                  <p>메가박스 영화관, 성성호수공원, 두정공원, 천호지 등 다양한 문화 및 여가 시설 인근</p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium mb-2 text-gray-700">상권</h3>
+                  <p>두정역 주변 상권 및 천안 원도심 상권 이용 편리</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 시세 및 전망 탭 */}
+        {activeTab === 3 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">분양가 및 시세 비교</h2>
+              <p className="mb-4">84㎡ 기준, 단위: 억원 (참고용 데이터)</p>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart
+                  data={priceComparisonData}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis domain={[3, 6]} />
+                  <Tooltip formatter={(value) => [`${value}억원`, '가격']} />
+                  <Legend />
+                  <Bar dataKey="price" name="가격 (억원)">
+                    {priceComparisonData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+              <div className="mt-4 text-sm text-gray-600">
+                <p>* 유보라 천안 두정역: 분양가 기준 (2022년 7월)</p>
+                <p>* 다른 아파트: 2024년 4~5월 기준 호가 및 실거래가</p>
+                <p>* 실시간 정확한 시세는 네이버 부동산, KB부동산 등 플랫폼 확인 필요</p>
+              </div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">전망 및 투자 관점</h2>
+              <div className="mb-4">
+                <h3 className="text-lg font-medium mb-2 text-green-600">장점 (Pros)</h3>
+                <ul className="space-y-1">
+                  <li className="flex items-start">
+                    <span className="text-green-500 mr-2">+</span>
+                    <p>두정역 북부출입구 개통으로 도보 5분대 역 접근성 확보</p>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-500 mr-2">+</span>
+                    <p>약 9천 세대 규모 신두정지구 신주거타운의 핵심 입지, 장기적 발전 가능성</p>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-500 mr-2">+</span>
+                    <p>최신 설계와 시설을 갖춘 신축 아파트</p>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-red-600">고려사항 (Considerations)</h3>
+                <ul className="space-y-1">
+                  <li className="flex items-start">
+                    <span className="text-red-500 mr-2">-</span>
+                    <p>2025년 준공 시점 전후 천안시, 특히 두정동 일대 대규모 아파트 입주 물량 집중</p>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-red-500 mr-2">-</span>
+                    <p>인근에 힐스테이트, 롯데캐슬 등 유사 시기 입주하는 신축 브랜드 아파트 다수 존재</p>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-red-500 mr-2">-</span>
+                    <p>84㎡ 단일 평형 구성으로 소형 또는 대형 평형 수요자 배제</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg md:col-span-2">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">추천 전략</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h3 className="text-lg font-medium mb-2 text-gray-700">실거주 관점</h3>
+                  <p className="mb-2">적합 대상: 1호선 두정역 이용이 중요하고, 신축 아파트의 쾌적함과 편의시설을 누리고자 하며, 84㎡ 평형이 필요하고, 신두정지구의 장기적인 발전을 기대하는 실수요자</p>
+                  <p>고려 사항: 입주 시점(2025년 6월) 전후의 공급 물량 집중으로 인해 초기 전세가 약세 또는 매매가 상승 제한 가능성 존재</p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium mb-2 text-gray-700">투자 관점</h3>
+                  <p className="mb-2">핵심 판단 기준: 초기 분양가 대비 현재 형성된 분양권 프리미엄(또는 할인율) 수준이 가장 중요한 판단 기준</p>
+                  <p>결론: 현시점에서는 단기적인 시세 차익보다 신두정지구의 발전과 개선된 교통 인프라의 혜택을 누리려는 장기 실거주 목적에 더 부합</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 개발 계획 탭 */}
+        {activeTab === 4 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">주요 개발 계획</h2>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <span className="text-purple-500 mr-2">➤</span>
+                  <div>
+                    <span className="font-medium">신두정지구 개발:</span> 
+                    <p>과거 우성사료, 천안모터스 등 공장 부지를 약 9천여 세대 규모의 미니 신도시급 신주거타운으로 개발하는 사업이 진행 중</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-purple-500 mr-2">➤</span>
+                  <div>
+                    <span className="font-medium">GTX-C 노선 천안 연장 계획:</span> 
+                    <p>수도권 광역급행철도(GTX) C노선의 천안 연장이 정부 계획에 포함되고 관련 지자체 간 협약 체결</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-purple-500 mr-2">➤</span>
+                  <div>
+                    <span className="font-medium">기타 개발 호재:</span> 
+                    <p>천안 북부 BIT 일반산업단지(2024년 예정), 미래모빌리티 국가산업단지(성환 종축장 부지, 2028년 예정), 천안역세권 혁신지구 도시재생사업 등</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">주변 신규 공급 현황</h2>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">단지명</th>
+                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">입주 예정</th>
+                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">세대수</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  <tr>
+                    <td className="px-4 py-2 text-sm text-gray-700">유보라 천안 두정역</td>
+                    <td className="px-4 py-2 text-sm text-gray-700">2025년 6월</td>
+                    <td className="px-4 py-2 text-sm text-gray-700">556세대</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2 text-sm text-gray-700">힐스테이트 두정역</td>
+                    <td className="px-4 py-2 text-sm text-gray-700">2025년 3월</td>
+                    <td className="px-4 py-2 text-sm text-gray-700">997세대</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2 text-sm text-gray-700">롯데캐슬 더 두정</td>
+                    <td className="px-4 py-2 text-sm text-gray-700">2025년</td>
+                    <td className="px-4 py-2 text-sm text-gray-700">584세대</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2 text-sm text-gray-700">천안 두정역 양우내안애</td>
+                    <td className="px-4 py-2 text-sm text-gray-700">2027년 12월</td>
+                    <td className="px-4 py-2 text-sm text-gray-700">미정</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p className="mt-4 text-sm text-gray-600">* 2025년은 천안시 전체적으로 아파트 입주 물량이 연간 최고치를 기록할 것으로 예상됨</p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg md:col-span-2">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">개발 타임라인</h2>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart
+                  layout="vertical"
+                  data={developmentTimelineData}
+                  margin={{ top: 5, right: 30, left: 150, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="category" dataKey="year" />
+                  <YAxis type="category" dataKey="name" width={150} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="name" name="개발 사항">
+                    {developmentTimelineData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 푸터 섹션 */}
+      <div className="footer-section mt-6 text-center text-gray-500 text-sm">
+        <p>※ 본 정보는 2024년 4~5월 기준 자료를 바탕으로 작성되었으며, 실시간 정확한 정보는 공식 자료를 확인하시기 바랍니다.</p>
+        <p>※ 시세 정보는 참고용이며, 실제 거래 시에는 네이버 부동산, KB부동산 등 공신력 있는 플랫폼의 최신 정보를 확인하세요.</p>
+      </div>
+    </div>
+  );
+};
+
+export default UboraApartmentInfo;
+    // 렌더링
+    ReactDOM.render(
+      <UboraApartmentInfo />,
+      document.getElementById('apartment-info-container')
+    );
+  </script>
+</body>
+</html>
